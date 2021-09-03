@@ -18,6 +18,7 @@ exec_prefix=@exec_prefix@
 bindir=@bindir@
 libdir=@libdir@
 includedir=@includedir@
+pkgconfigexecdir=${prefix}/libdata/pkgconfig
 
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
@@ -42,6 +43,7 @@ GTOOLS=copyg listg labelg dretog amtog geng complg showg NRswitchg \
   subdivideg vcolg delptg cubhamg twohamg hamheuristic converseg \
   nbrhoodg genspecialg edgetransg genbgL dreadnaut @shortg_or_null@
 GLIBS=nauty.a nauty1.a nautyW.a nautyW1.a nautyL.a nautyL1.a
+PCFILE=nauty.pc
 
 # @edit_msg@
 
@@ -603,11 +605,13 @@ checks6: checks6.c ${GTOOLSH} gtools.o
 	${CC} -o checks6 ${SAFECFLAGS} checks6.c gtools.o
 
 install:
-	${MKDIR_P} ${DESTDIR}${bindir} ${DESTDIR}${includedir} ${DESTDIR}${libdir}
+	${MKDIR_P} ${DESTDIR}${bindir} ${DESTDIR}${includedir} ${DESTDIR}${libdir} ${DESTDIR}${pkgconfigexecdir}
 	${INSTALL} ${GTOOLS} ${DESTDIR}${bindir}
 	${INSTALL_DATA} ${GTOOLSH} ${DESTDIR}${includedir}
 	${INSTALL} ${GLIBS} ${DESTDIR}${libdir}
 	for lib in ${GLIBS} ; do \
 	   mv -f ${DESTDIR}${libdir}/$${lib} ${DESTDIR}${libdir}/lib$${lib} ; done
+	for pc in $(patsubst %.a,%,${GLIBS}) ; do \
+	   (cat ${PCFILE} | sed -e s/-lnauty/-l$${pc}/ > ${DESTDIR}${pkgconfigexecdir}/$${pc}.pc); done
 
 # @edit_msg@

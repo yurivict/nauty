@@ -462,4 +462,5 @@ AC_PROG_MKDIR_P
 AC_PROG_INSTALL
 
 AC_OUTPUT(makefile:makefile.in nauty.h:nauty-h.in
-    naututil.h:naututil-h.in gtools.h:gtools-h.in)
+    naututil.h:naututil-h.in gtools.h:gtools-h.in
+    nauty.pc:nauty.pc.in)
